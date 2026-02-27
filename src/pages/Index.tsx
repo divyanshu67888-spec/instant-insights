@@ -1,12 +1,48 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { useState } from "react";
+import Hero from "@/components/Hero";
+import IdeaInput from "@/components/IdeaInput";
+import ValidationReport from "@/components/ValidationReport";
+import Features from "@/components/Features";
+import { motion } from "framer-motion";
 
 const Index = () => {
+  const [showReport, setShowReport] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleSubmit = (idea: string) => {
+    setIsLoading(true);
+    // Simulate agent deployment
+    setTimeout(() => {
+      setIsLoading(false);
+      setShowReport(true);
+    }, 3000);
+  };
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background">
-      <div className="text-center">
-        <h1 className="mb-4 text-4xl font-bold">Welcome to Your Blank App</h1>
-        <p className="text-xl text-muted-foreground">Start building your amazing project here!</p>
-      </div>
+    <div className="min-h-screen bg-background relative">
+      <Hero />
+      <Features />
+      <IdeaInput onSubmit={handleSubmit} isLoading={isLoading} />
+
+      {showReport && (
+        <motion.div
+          id="demo"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5 }}
+        >
+          <ValidationReport />
+        </motion.div>
+      )}
+
+      {/* Footer */}
+      <footer className="py-12 px-6 border-t border-border">
+        <div className="max-w-6xl mx-auto text-center">
+          <p className="font-mono text-xs text-muted-foreground">
+            WAR ROOM v1.0 — AI-Powered Market Intelligence
+          </p>
+        </div>
+      </footer>
     </div>
   );
 };
