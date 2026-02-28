@@ -1,1 +1,4 @@
 project_id = "aqbjwyhauejsziksuolp"
+
+[functions.war-room]
+verify_jwt = false
