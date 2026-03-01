@@ -36,7 +36,7 @@ serve(async (req) => {
   try {
     const { idea } = await req.json();
     if (!idea) {
-      return new Response(JSON.stringify({ error: 'Business idea is required' }), {
+      return new Response(JSON.stringify({ error: 'Research idea is required' }), {
         status: 400,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
@@ -50,41 +50,80 @@ serve(async (req) => {
     let liveContext = '';
     if (FIRECRAWL_API_KEY) {
       console.log('Firecrawl available — gathering live web data...');
-      const [marketData, competitorData, trendData] = await Promise.all([
-        searchWeb(`${idea} market size TAM growth 2024 2025`, FIRECRAWL_API_KEY),
-        searchWeb(`${idea} competitors startups companies market share`, FIRECRAWL_API_KEY),
-        searchWeb(`${idea} trends consumer demand innovation ideas`, FIRECRAWL_API_KEY),
+      const [marketData, academicData, trendData, industryData] = await Promise.all([
+        searchWeb(`${idea} market size TAM growth statistics 2024 2025`, FIRECRAWL_API_KEY),
+        searchWeb(`${idea} research papers academic studies evidence`, FIRECRAWL_API_KEY),
+        searchWeb(`${idea} trends innovation adoption rate demand signals`, FIRECRAWL_API_KEY),
+        searchWeb(`${idea} industry report competitors SWOT analysis risks`, FIRECRAWL_API_KEY),
       ]);
 
       liveContext = `
 === LIVE WEB INTELLIGENCE ===
---- Market Research ---
+--- Market & Quantitative Data ---
 ${marketData || 'No data found'}
---- Competitor Intelligence ---
-${competitorData || 'No data found'}
---- Trends & Innovation ---
+--- Academic & Research Evidence ---
+${academicData || 'No data found'}
+--- Trends & Innovation Signals ---
 ${trendData || 'No data found'}
+--- Industry & Competitive Intelligence ---
+${industryData || 'No data found'}
 === END LIVE DATA ===
 `;
       console.log('Live web data gathered successfully');
     }
 
-    const systemPrompt = `You are WAR ROOM, an elite market intelligence system. Given a business idea, produce a comprehensive JSON report.
+    const systemPrompt = `You are an advanced AI Research Validation Engine. You simulate a structured multi-agent evaluation system with 4 specialist agents analyzing research ideas, business concepts, or scientific hypotheses.
 
-${liveContext ? 'Use the LIVE WEB DATA below for grounded analysis with real numbers and sources.' : 'Use your training knowledge. Be specific with realistic estimates.'}
+${liveContext ? 'Use the LIVE WEB DATA below for grounded analysis with real numbers, sources, and evidence.' : 'Use your training knowledge. Be specific with realistic estimates and data points.'}
 
-Respond with ONLY valid JSON matching this structure (no markdown, no extra text):
+Respond with ONLY valid JSON matching this exact structure (no markdown, no extra text):
 {
   "score": <number 0-100>,
-  "verdict": "<one-line verdict>",
-  "agents": [
-    { "name": "SCOUT", "role": "Market Size Analyst", "finding": "<2-3 sentences>", "sentiment": "positive" | "warning" | "neutral" },
-    { "name": "VIPER", "role": "Competitor Intel", "finding": "<2-3 sentences>", "sentiment": "positive" | "warning" | "neutral" },
-    { "name": "ORACLE", "role": "Pricing Strategist", "finding": "<2-3 sentences>", "sentiment": "positive" | "warning" | "neutral" },
-    { "name": "SENTINEL", "role": "Risk Assessor", "finding": "<2-3 sentences>", "sentiment": "positive" | "warning" | "neutral" },
-    { "name": "ECHO", "role": "Customer Voice", "finding": "<2-3 sentences>", "sentiment": "positive" | "warning" | "neutral" },
-    { "name": "PHANTOM", "role": "Trend Tracker", "finding": "<2-3 sentences>", "sentiment": "positive" | "warning" | "neutral" }
-  ],
+  "confidenceLevel": "Low" | "Moderate" | "High",
+  "verdict": "<one-line executive summary>",
+
+  "step1_statisticalSkeptic": {
+    "statisticalSignals": "<2-3 sentences on current quantitative trends>",
+    "quantitativeTrends": "<2-3 sentences on market/academic demand signals & adoption rates>",
+    "riskIndicators": "<2-3 sentences on data-backed risks>",
+    "dataGaps": "<2-3 sentences on missing numerical evidence>",
+    "sentiment": "positive" | "warning" | "neutral"
+  },
+
+  "step2_theorySpecialist": {
+    "theoreticalContext": "<2-3 sentences on relevant theories (SWOT, Porter's, innovation frameworks)>",
+    "strategicEvaluation": "<2-3 sentences>",
+    "strengths": ["<strength 1>", "<strength 2>", "<strength 3>"],
+    "weaknesses": ["<weakness 1>", "<weakness 2>", "<weakness 3>"],
+    "conceptualGaps": "<2-3 sentences>",
+    "sentiment": "positive" | "warning" | "neutral"
+  },
+
+  "step3_methodologyCritic": {
+    "assumptionsIdentified": ["<assumption 1>", "<assumption 2>", "<assumption 3>"],
+    "methodologicalRisks": "<2-3 sentences>",
+    "biasAnalysis": "<2-3 sentences on bias risks>",
+    "feasibilityConcerns": "<2-3 sentences on scalability, ethics, data collection>",
+    "sentiment": "positive" | "warning" | "neutral"
+  },
+
+  "step4_finalReport": {
+    "executiveSummary": "<3-4 sentence synthesis>",
+    "crossAgentInsights": ["<insight 1>", "<insight 2>", "<insight 3>", "<insight 4>"],
+    "majorRisks": ["<risk 1>", "<risk 2>", "<risk 3>"],
+    "opportunitySignals": ["<opportunity 1>", "<opportunity 2>", "<opportunity 3>"]
+  },
+
+  "step5_sources": {
+    "sourceTypes": [
+      { "type": "News", "relevance": "high" | "medium" | "low", "note": "<what was found>" },
+      { "type": "Academic Papers", "relevance": "high" | "medium" | "low", "note": "<what was found>" },
+      { "type": "Industry Reports", "relevance": "high" | "medium" | "low", "note": "<what was found>" },
+      { "type": "Government Data", "relevance": "high" | "medium" | "low", "note": "<what was found>" },
+      { "type": "Market Trend Analysis", "relevance": "high" | "medium" | "low", "note": "<what was found>" }
+    ]
+  },
+
   "marketMetrics": {
     "tam": "<total addressable market e.g. $50B>",
     "sam": "<serviceable addressable market e.g. $12B>",
@@ -98,27 +137,34 @@ Respond with ONLY valid JSON matching this structure (no markdown, no extra text
       { "year": "2026", "value": <number in billions> }
     ]
   },
-  "competitors": [
-    { "name": "<competitor name>", "marketShare": <number 0-100>, "strength": "<one key strength>", "weakness": "<one key weakness>" }
-  ],
+
   "dimensionScores": [
-    { "dimension": "Market Size", "score": <0-100> },
-    { "dimension": "Competition", "score": <0-100> },
-    { "dimension": "Timing", "score": <0-100> },
-    { "dimension": "Profitability", "score": <0-100> },
+    { "dimension": "Market Viability", "score": <0-100> },
+    { "dimension": "Evidence Strength", "score": <0-100> },
+    { "dimension": "Methodology", "score": <0-100> },
+    { "dimension": "Feasibility", "score": <0-100> },
     { "dimension": "Scalability", "score": <0-100> },
-    { "dimension": "Defensibility", "score": <0-100> }
+    { "dimension": "Innovation", "score": <0-100> }
   ],
+
+  "competitors": [
+    { "name": "<competitor>", "marketShare": <0-100>, "strength": "<key strength>", "weakness": "<key weakness>" }
+  ],
+
   "improvements": [
     { "title": "<short title>", "description": "<1-2 sentences>", "impact": "high" | "medium" | "low", "type": "core" | "outOfBox" }
   ]
 }
 
-For "competitors", include 4-6 real or realistic competitors with market share percentages that sum to roughly 70-95% (leaving room for others).
-For "improvements", include 6-8 ideas — mix of "core" (practical improvements) and "outOfBox" (creative/disruptive ideas).
-For "dimensionScores", rate each dimension 0-100 based on your analysis.
-For "marketMetrics.yearOverYear", provide realistic market size projections.
-Be specific with numbers, percentages, and data points.`;
+Scoring Logic:
+- Strong live data support → higher score
+- Weak evidence or high assumptions → lower score
+- High feasibility + strong demand → higher score
+- Major methodological flaws → reduce score
+
+For "competitors", include 4-6 real or realistic competitors.
+For "improvements", include 6-8 ideas — mix of "core" and "outOfBox".
+Be structured, analytical, skeptical, and evidence-driven. Produce a research-grade validation.`;
 
     const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
       method: 'POST',
@@ -130,7 +176,7 @@ Be specific with numbers, percentages, and data points.`;
         model: 'google/gemini-3-flash-preview',
         messages: [
           { role: 'system', content: systemPrompt },
-          { role: 'user', content: `Analyze this business idea: ${idea}\n\n${liveContext}` },
+          { role: 'user', content: `Analyze this research/business idea: ${idea}\n\n${liveContext}` },
         ],
       }),
     });

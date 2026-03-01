@@ -65,7 +65,7 @@ const Index = () => {
       <footer className="py-12 px-6 border-t border-border">
         <div className="max-w-6xl mx-auto text-center">
           <p className="font-mono text-xs text-muted-foreground">
-            WAR ROOM v2.0 — AI-Powered Market Intelligence
+            RESEARCH VALIDATION ENGINE v3.0 — Multi-Agent AI Analysis
           </p>
         </div>
       </footer>
