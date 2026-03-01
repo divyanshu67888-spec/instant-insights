@@ -34,13 +34,15 @@ serve(async (req) => {
   }
 
   try {
-    const { idea } = await req.json();
+    const { idea, mode = 'research' } = await req.json();
     if (!idea) {
-      return new Response(JSON.stringify({ error: 'Research idea is required' }), {
+      return new Response(JSON.stringify({ error: 'Idea is required' }), {
         status: 400,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
     }
+
+    const isBusinessMode = mode === 'business';
 
     const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
     if (!LOVABLE_API_KEY) throw new Error('LOVABLE_API_KEY is not configured');
@@ -72,7 +74,11 @@ ${industryData || 'No data found'}
       console.log('Live web data gathered successfully');
     }
 
-    const systemPrompt = `You are an advanced AI Research Validation Engine. You simulate a structured multi-agent evaluation system with 4 specialist agents analyzing research ideas, business concepts, or scientific hypotheses.
+    const modeInstructions = isBusinessMode
+      ? `You are an advanced AI Business Validation Engine. You simulate a structured multi-agent evaluation system with 4 specialist agents analyzing business ideas, startup concepts, or market opportunities. Your goal is to provide a comprehensive business viability assessment with actionable insights, solid business model recommendations, revenue strategies, and competitive positioning.`
+      : `You are an advanced AI Research Validation Engine. You simulate a structured multi-agent evaluation system with 4 specialist agents analyzing research ideas, business concepts, or scientific hypotheses.`;
+
+    const systemPrompt = `${modeInstructions}
 
 ${liveContext ? 'Use the LIVE WEB DATA below for grounded analysis with real numbers, sources, and evidence.' : 'Use your training knowledge. Be specific with realistic estimates and data points.'}
 
@@ -176,7 +182,7 @@ Be structured, analytical, skeptical, and evidence-driven. Produce a research-gr
         model: 'google/gemini-3-flash-preview',
         messages: [
           { role: 'system', content: systemPrompt },
-          { role: 'user', content: `Analyze this research/business idea: ${idea}\n\n${liveContext}` },
+          { role: 'user', content: `Analyze this ${isBusinessMode ? 'business idea' : 'research idea'}: ${idea}\n\n${liveContext}` },
         ],
       }),
     });
