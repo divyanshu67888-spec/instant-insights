@@ -25,13 +25,13 @@ const IdeaInput = ({ onSubmit, isLoading }: IdeaInputProps) => {
           className="text-center mb-8"
         >
           <p className="font-mono text-primary text-sm tracking-widest uppercase mb-3">
-            Mission Briefing
+            Research Input
           </p>
           <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-3">
-            Enter Your Idea
+            Enter Your Research Idea
           </h2>
           <p className="text-muted-foreground">
-            Describe your business idea and our agents will deploy across the live web.
+            Describe your research idea, business concept, or hypothesis — our 4-agent validation engine will analyze it.
           </p>
         </motion.div>
 
@@ -61,12 +61,12 @@ const IdeaInput = ({ onSubmit, isLoading }: IdeaInputProps) => {
                   {isLoading ? (
                     <motion.span key="loading" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="flex items-center gap-2">
                       <Loader2 className="w-4 h-4 animate-spin" />
-                      Deploying Agents...
+                      Validating...
                     </motion.span>
                   ) : (
                     <motion.span key="idle" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="flex items-center gap-2">
                       <Crosshair className="w-4 h-4" />
-                      Deploy War Room
+                      Run Validation
                     </motion.span>
                   )}
                 </AnimatePresence>
