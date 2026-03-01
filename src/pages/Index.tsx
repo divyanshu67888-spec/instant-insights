@@ -11,13 +11,13 @@ const Index = () => {
   const [report, setReport] = useState<WarRoomReport | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = async (idea: string) => {
+  const handleSubmit = async (idea: string, mode: "research" | "business" = "research") => {
     setIsLoading(true);
     setReport(null);
 
     try {
       const { data, error } = await supabase.functions.invoke('war-room', {
-        body: { idea },
+        body: { idea, mode },
       });
 
       if (error) throw error;
@@ -48,7 +48,7 @@ const Index = () => {
     <div className="min-h-screen bg-background relative">
       <Hero />
       <Features />
-      <IdeaInput onSubmit={handleSubmit} isLoading={isLoading} />
+      <IdeaInput onSubmit={(idea, mode) => handleSubmit(idea, mode)} isLoading={isLoading} />
 
       {report && (
         <motion.div
@@ -62,8 +62,11 @@ const Index = () => {
       )}
 
       {/* Footer */}
-      <footer className="py-12 px-6 border-t border-border">
-        <div className="max-w-6xl mx-auto text-center">
+      <footer className="py-16 px-6 border-t border-border">
+        <div className="max-w-3xl mx-auto text-center space-y-6">
+          <blockquote className="text-sm md:text-base text-muted-foreground italic leading-relaxed">
+            "Designed to assist academic and applied researchers by quickly validating hypotheses with live data and structured reasoning — reducing weeks of work into minutes."
+          </blockquote>
           <p className="font-mono text-xs text-muted-foreground">
             RESEARCH VALIDATION ENGINE v3.0 — Multi-Agent AI Analysis
           </p>
