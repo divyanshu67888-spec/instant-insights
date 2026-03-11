@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Crosshair, Loader2, FlaskConical, Briefcase } from "lucide-react";
+import { ArrowRight, Loader2, FlaskConical, Briefcase } from "lucide-react";
 
 interface IdeaInputProps {
   onSubmit: (idea: string, mode: "research" | "business") => void;
@@ -12,17 +12,15 @@ const modes = [
     key: "research" as const,
     label: "Research",
     icon: FlaskConical,
-    placeholder:
-      "e.g. Investigating the impact of microplastics on freshwater ecosystems using spectroscopic analysis...",
-    description: "Validate hypotheses with structured reasoning & live data",
+    placeholder: "e.g. Investigating the impact of microplastics on freshwater ecosystems...",
+    description: "Validate hypotheses with structured reasoning and live data",
   },
   {
     key: "business" as const,
     label: "Business",
     icon: Briefcase,
-    placeholder:
-      "e.g. A subscription service delivering farm-fresh organic produce to urban apartments in Bangalore...",
-    description: "Generate solid business ideas with market validation & competition analysis",
+    placeholder: "e.g. A subscription service delivering organic produce to urban apartments...",
+    description: "Market validation with competition analysis and revenue strategy",
   },
 ];
 
@@ -38,32 +36,28 @@ const IdeaInput = ({ onSubmit, isLoading }: IdeaInputProps) => {
   };
 
   return (
-    <section className="py-24 px-6 relative" id="war-room">
-      <div className="max-w-3xl mx-auto">
+    <section className="py-20 px-6 border-t border-border" id="war-room">
+      <div className="max-w-2xl mx-auto">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-center mb-10"
+          className="mb-8"
         >
-          <p className="font-mono text-primary text-xs tracking-[0.2em] uppercase mb-4">
-            Command Center
-          </p>
-          <h2 className="font-display text-3xl md:text-4xl font-bold text-foreground mb-3">
-            Enter Your Idea
+          <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-2">
+            Describe your idea
           </h2>
-          <p className="text-muted-foreground text-sm">
-            Choose a mode and describe your idea — our multi-agent engine will analyze it.
+          <p className="text-sm text-muted-foreground">
+            Choose a mode and let our agents do the rest.
           </p>
         </motion.div>
 
         {/* Mode Toggle */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 10 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ delay: 0.05 }}
-          className="flex justify-center gap-2 mb-4"
+          className="flex gap-1 p-1 bg-card border border-border rounded-lg w-fit mb-2"
         >
           {modes.map((mode) => {
             const Icon = mode.icon;
@@ -73,67 +67,65 @@ const IdeaInput = ({ onSubmit, isLoading }: IdeaInputProps) => {
                 key={mode.key}
                 type="button"
                 onClick={() => setActiveMode(mode.key)}
-                className={`flex items-center gap-2 px-5 py-2.5 rounded-xl font-mono text-xs font-semibold tracking-wide transition-all duration-300 ${
+                className={`flex items-center gap-1.5 px-4 py-2 rounded-md text-xs font-medium transition-all ${
                   isActive
-                    ? "gradient-warm text-primary-foreground shadow-lg shadow-primary/15"
-                    : "bg-secondary/50 text-muted-foreground border border-border hover:border-primary/30 hover:text-foreground"
+                    ? "bg-secondary text-foreground shadow-sm"
+                    : "text-muted-foreground hover:text-foreground"
                 }`}
               >
-                <Icon className="w-4 h-4" />
+                <Icon className="w-3.5 h-3.5" />
                 {mode.label}
               </button>
             );
           })}
         </motion.div>
 
-        {/* Mode description */}
         <AnimatePresence mode="wait">
           <motion.p
             key={activeMode}
-            initial={{ opacity: 0, y: -5 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 5 }}
-            className="text-center text-xs text-muted-foreground font-mono mb-6"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="text-xs text-muted-foreground mb-4"
           >
             {currentMode.description}
           </motion.p>
         </AnimatePresence>
 
         <motion.form
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 10 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ delay: 0.1 }}
           onSubmit={handleSubmit}
-          className="relative"
         >
-          <div className="card-premium rounded-2xl p-1.5 transition-all duration-300 focus-within:border-primary/30 focus-within:shadow-[0_0_40px_hsl(174_80%_46%/0.08)]">
+          <div className="rounded-xl border border-border bg-card overflow-hidden focus-within:border-primary/40 transition-colors">
             <textarea
               value={idea}
               onChange={(e) => setIdea(e.target.value)}
               placeholder={currentMode.placeholder}
-              className="w-full bg-transparent text-foreground placeholder:text-muted-foreground/40 p-5 rounded-xl resize-none focus:outline-none font-mono text-sm leading-relaxed min-h-[140px]"
+              className="w-full bg-transparent text-foreground placeholder:text-muted-foreground/40 p-4 resize-none focus:outline-none text-sm leading-relaxed min-h-[120px]"
               disabled={isLoading}
             />
-            <div className="flex justify-end p-3 pt-0">
+            <div className="flex justify-between items-center px-4 py-3 border-t border-border bg-secondary/30">
+              <span className="text-xs text-muted-foreground">
+                {idea.length > 0 ? `${idea.length} characters` : "Be as specific as possible"}
+              </span>
               <button
                 type="submit"
                 disabled={!idea.trim() || isLoading}
-                className="flex items-center gap-2 px-7 py-3 rounded-xl gradient-warm text-primary-foreground font-bold text-sm hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:scale-100 shadow-lg shadow-primary/15"
+                className="inline-flex items-center gap-2 px-5 py-2 rounded-lg bg-primary text-primary-foreground font-medium text-sm hover:bg-primary/90 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
               >
-                <AnimatePresence mode="wait">
-                  {isLoading ? (
-                    <motion.span key="loading" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="flex items-center gap-2">
-                      <Loader2 className="w-4 h-4 animate-spin" />
-                      Analyzing...
-                    </motion.span>
-                  ) : (
-                    <motion.span key="idle" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="flex items-center gap-2">
-                      <Crosshair className="w-4 h-4" />
-                      Run Validation
-                    </motion.span>
-                  )}
-                </AnimatePresence>
+                {isLoading ? (
+                  <>
+                    <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                    Analyzing…
+                  </>
+                ) : (
+                  <>
+                    Run analysis
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </>
+                )}
               </button>
             </div>
           </div>
