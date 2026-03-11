@@ -89,6 +89,19 @@ const Hero = () => {
             </div>
           ))}
         </motion.div>
+        </div>
+
+        {/* 3D Robot */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.6, delay: 0.3 }}
+          className="hidden md:block"
+        >
+          <Suspense fallback={<div className="w-full h-[400px]" />}>
+            <MiniRobot />
+          </Suspense>
+        </motion.div>
       </div>
     </section>
   );
