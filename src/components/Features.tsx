@@ -36,36 +36,40 @@ const features = [
 
 const Features = () => {
   return (
-    <section className="py-24 px-6 relative">
-      <div className="max-w-6xl mx-auto">
+    <section className="py-28 px-6 relative">
+      {/* Subtle background accent */}
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,hsl(174_80%_46%/0.03)_0%,transparent_60%)]" />
+
+      <div className="max-w-6xl mx-auto relative">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-center mb-16"
+          className="text-center mb-20"
         >
-          <p className="font-mono text-primary text-sm tracking-widest uppercase mb-3">
+          <p className="font-mono text-primary text-xs tracking-[0.2em] uppercase mb-4">
             Intelligence Stack
           </p>
-          <h2 className="text-3xl md:text-4xl font-bold text-foreground">
-            Why This Isn't Just Another AI Chat
+          <h2 className="font-display text-3xl md:text-5xl font-bold text-foreground">
+            Why This Isn't Just{" "}
+            <span className="gradient-warm-text">Another AI Chat</span>
           </h2>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           {features.map((feature, index) => (
             <motion.div
               key={feature.title}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: index * 0.1 }}
-              className="group p-6 rounded-lg bg-card border border-border hover:border-glow transition-all duration-500"
+              transition={{ delay: index * 0.08, duration: 0.5 }}
+              className="group card-premium rounded-2xl p-7 transition-all duration-500"
             >
-              <div className="w-10 h-10 rounded-md bg-secondary flex items-center justify-center mb-4 group-hover:bg-primary/10 transition-colors">
+              <div className="w-11 h-11 rounded-xl bg-primary/10 flex items-center justify-center mb-5 group-hover:bg-primary/20 group-hover:scale-110 transition-all duration-300">
                 <feature.icon className="w-5 h-5 text-primary" />
               </div>
-              <h3 className="text-lg font-semibold text-foreground mb-2">
+              <h3 className="text-lg font-semibold text-foreground mb-2.5 font-display">
                 {feature.title}
               </h3>
               <p className="text-sm text-muted-foreground leading-relaxed">

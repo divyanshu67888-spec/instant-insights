@@ -62,13 +62,14 @@ const Index = () => {
       )}
 
       {/* Footer */}
-      <footer className="py-16 px-6 border-t border-border">
-        <div className="max-w-3xl mx-auto text-center space-y-6">
-          <blockquote className="text-sm md:text-base text-muted-foreground italic leading-relaxed">
+      <footer className="py-20 px-6 border-t border-border/50">
+        <div className="max-w-3xl mx-auto text-center space-y-8">
+          <div className="w-12 h-[1px] gradient-warm mx-auto rounded-full" />
+          <blockquote className="text-sm md:text-base text-muted-foreground italic leading-relaxed max-w-xl mx-auto">
             "Designed to assist academic and applied researchers by quickly validating hypotheses with live data and structured reasoning — reducing weeks of work into minutes."
           </blockquote>
-          <p className="font-mono text-xs text-muted-foreground">
-            RESEARCH VALIDATION ENGINE v3.0 — Multi-Agent AI Analysis
+          <p className="font-mono text-[10px] text-muted-foreground/60 tracking-[0.2em] uppercase">
+            Research Validation Engine v3.0 — Multi-Agent AI Analysis
           </p>
         </div>
       </footer>
