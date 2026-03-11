@@ -4,72 +4,66 @@ import { Search, Zap, Shield, TrendingUp, Globe, Brain } from "lucide-react";
 const features = [
   {
     icon: Search,
-    title: "Live Market Search",
-    description: "Real-time data from live search APIs — not stale training data. Current prices, trends, and competitor moves.",
+    title: "Live market data",
+    description: "Pulls real-time data from search APIs — current prices, trends, and competitor activity. Not stale training data.",
   },
   {
     icon: Brain,
-    title: "Agent Personas",
-    description: "6 specialized AI agents analyze your idea from every angle: market fit, competition, pricing, risks, and growth.",
+    title: "6 specialized agents",
+    description: "Each agent analyzes a different dimension: market fit, competition, pricing, risks, opportunities, and growth potential.",
   },
   {
     icon: Zap,
-    title: "60-Second Reports",
-    description: "What used to take weeks and thousands of dollars now takes a single minute. Full 360° validation.",
+    title: "Results in 60 seconds",
+    description: "What used to require weeks of research and thousands in consulting fees now takes a single minute.",
   },
   {
     icon: Globe,
-    title: "Geo-Targeted Intel",
-    description: "Localized insights — from petrol prices in Delhi to trending hashtags in New York. Context matters.",
+    title: "Geo-targeted insights",
+    description: "Localized intelligence — from petrol prices in Delhi to trending topics in New York. Context that matters.",
   },
   {
     icon: Shield,
-    title: "Risk Assessment",
-    description: "Identify blind spots, regulatory hurdles, and market risks before you invest a single rupee.",
+    title: "Risk identification",
+    description: "Surface blind spots, regulatory hurdles, and market risks before committing any resources.",
   },
   {
     icon: TrendingUp,
-    title: "Opportunity Scoring",
-    description: "Proprietary scoring algorithm rates your idea across 12 dimensions. Data-driven go/no-go decisions.",
+    title: "Opportunity scoring",
+    description: "Rates your idea across 12 dimensions with a clear go/no-go recommendation backed by data.",
   },
 ];
 
 const Features = () => {
   return (
-    <section className="py-28 px-6 relative">
-      {/* Subtle background accent */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,hsl(174_80%_46%/0.03)_0%,transparent_60%)]" />
-
-      <div className="max-w-6xl mx-auto relative">
+    <section id="features" className="py-20 px-6 border-t border-border">
+      <div className="max-w-6xl mx-auto">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-center mb-20"
+          className="mb-14 max-w-lg"
         >
-          <p className="font-mono text-primary text-xs tracking-[0.2em] uppercase mb-4">
-            Intelligence Stack
+          <p className="text-xs font-medium text-primary uppercase tracking-wider mb-3">
+            How it works
           </p>
-          <h2 className="font-display text-3xl md:text-5xl font-bold text-foreground">
-            Why This Isn't Just{" "}
-            <span className="gradient-warm-text">Another AI Chat</span>
+          <h2 className="text-2xl md:text-3xl font-bold text-foreground leading-snug">
+            Six agents, one report, zero guesswork
           </h2>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px bg-border rounded-xl overflow-hidden">
           {features.map((feature, index) => (
             <motion.div
               key={feature.title}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
-              transition={{ delay: index * 0.08, duration: 0.5 }}
-              className="group card-premium rounded-2xl p-7 transition-all duration-500"
+              transition={{ delay: index * 0.05 }}
+              className="bg-card p-7 hover:bg-secondary/50 transition-colors"
             >
-              <div className="w-11 h-11 rounded-xl bg-primary/10 flex items-center justify-center mb-5 group-hover:bg-primary/20 group-hover:scale-110 transition-all duration-300">
-                <feature.icon className="w-5 h-5 text-primary" />
-              </div>
-              <h3 className="text-lg font-semibold text-foreground mb-2.5 font-display">
+              <feature.icon className="w-5 h-5 text-primary mb-4" />
+              <h3 className="text-sm font-semibold text-foreground mb-2">
                 {feature.title}
               </h3>
               <p className="text-sm text-muted-foreground leading-relaxed">

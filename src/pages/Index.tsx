@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import IdeaInput from "@/components/IdeaInput";
 import ValidationReport, { WarRoomReport } from "@/components/ValidationReport";
@@ -45,7 +46,8 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background relative">
+    <div className="min-h-screen bg-background">
+      <Navbar />
       <Hero />
       <Features />
       <IdeaInput onSubmit={(idea, mode) => handleSubmit(idea, mode)} isLoading={isLoading} />
@@ -55,22 +57,56 @@ const Index = () => {
           id="demo"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 0.5 }}
+          transition={{ duration: 0.4 }}
         >
           <ValidationReport report={report} />
         </motion.div>
       )}
 
       {/* Footer */}
-      <footer className="py-20 px-6 border-t border-border/50">
-        <div className="max-w-3xl mx-auto text-center space-y-8">
-          <div className="w-12 h-[1px] gradient-warm mx-auto rounded-full" />
-          <blockquote className="text-sm md:text-base text-muted-foreground italic leading-relaxed max-w-xl mx-auto">
-            "Designed to assist academic and applied researchers by quickly validating hypotheses with live data and structured reasoning — reducing weeks of work into minutes."
-          </blockquote>
-          <p className="font-mono text-[10px] text-muted-foreground/60 tracking-[0.2em] uppercase">
-            Research Validation Engine v3.0 — Multi-Agent AI Analysis
-          </p>
+      <footer className="border-t border-border">
+        <div className="max-w-6xl mx-auto px-6 py-16">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+            {/* Brand */}
+            <div className="md:col-span-2">
+              <div className="flex items-center gap-2 mb-4">
+                <div className="w-6 h-6 rounded-md bg-primary flex items-center justify-center">
+                  <span className="text-primary-foreground font-bold text-[10px]">V</span>
+                </div>
+                <span className="font-semibold text-foreground text-sm">VentureVitals</span>
+              </div>
+              <p className="text-sm text-muted-foreground max-w-md leading-relaxed mb-6">
+                Designed to assist academic and applied researchers by quickly validating
+                hypotheses with live data and structured reasoning — reducing weeks of work
+                into minutes.
+              </p>
+              <p className="text-xs text-muted-foreground/60">
+                © {new Date().getFullYear()} VentureVitals. Multi-Agent AI Analysis.
+              </p>
+            </div>
+
+            {/* Links */}
+            <div>
+              <p className="text-xs font-medium text-foreground uppercase tracking-wider mb-4">
+                Product
+              </p>
+              <div className="space-y-2.5">
+                {[
+                  { label: "Features", href: "#features" },
+                  { label: "How it works", href: "#war-room" },
+                  { label: "Demo", href: "#demo" },
+                ].map((link) => (
+                  <a
+                    key={link.label}
+                    href={link.href}
+                    className="block text-sm text-muted-foreground hover:text-foreground transition-colors"
+                  >
+                    {link.label}
+                  </a>
+                ))}
+              </div>
+            </div>
+          </div>
         </div>
       </footer>
     </div>
