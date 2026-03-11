@@ -1,10 +1,14 @@
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
+import { lazy, Suspense } from "react";
+
+const MiniRobot = lazy(() => import("@/components/MiniRobot"));
 
 const Hero = () => {
   return (
     <section className="relative pt-32 pb-20 md:pt-40 md:pb-28 px-6">
-      <div className="max-w-5xl mx-auto">
+      <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+        <div>
         {/* Badge */}
         <motion.div
           initial={{ opacity: 0 }}
@@ -84,6 +88,19 @@ const Hero = () => {
               </p>
             </div>
           ))}
+        </motion.div>
+        </div>
+
+        {/* 3D Robot */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.6, delay: 0.3 }}
+          className="hidden md:block"
+        >
+          <Suspense fallback={<div className="w-full h-[400px]" />}>
+            <MiniRobot />
+          </Suspense>
         </motion.div>
       </div>
     </section>
