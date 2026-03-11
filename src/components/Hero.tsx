@@ -7,7 +7,8 @@ const MiniRobot = lazy(() => import("@/components/MiniRobot"));
 const Hero = () => {
   return (
     <section className="relative pt-32 pb-20 md:pt-40 md:pb-28 px-6">
-      <div className="max-w-5xl mx-auto">
+      <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+        <div>
         {/* Badge */}
         <motion.div
           initial={{ opacity: 0 }}
