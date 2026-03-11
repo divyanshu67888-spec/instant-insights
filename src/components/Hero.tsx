@@ -1,5 +1,8 @@
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
+import { lazy, Suspense } from "react";
+
+const MiniRobot = lazy(() => import("@/components/MiniRobot"));
 
 const Hero = () => {
   return (
