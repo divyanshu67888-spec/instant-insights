@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import { motion } from "framer-motion";
 import ScoreBanner from "./report/ScoreBanner";
 import AgentStepCard from "./report/AgentStepCard";
