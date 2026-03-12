@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, Loader2, FlaskConical, Briefcase } from "lucide-react";
+import VoiceInputButton from "./VoiceInputButton";
 
 interface IdeaInputProps {
   onSubmit: (idea: string, mode: "research" | "business") => void;
