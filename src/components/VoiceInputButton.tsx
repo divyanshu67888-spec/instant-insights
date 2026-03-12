@@ -1,6 +1,6 @@
 import { useState, useCallback } from "react";
 import { Mic, MicOff, Loader2 } from "lucide-react";
-import { useScribe } from "@elevenlabs/react";
+import { useScribe, CommitStrategy } from "@elevenlabs/react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
 
