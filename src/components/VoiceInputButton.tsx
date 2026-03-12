@@ -14,7 +14,7 @@ const VoiceInputButton = ({ onTranscript, disabled }: VoiceInputButtonProps) => 
 
   const scribe = useScribe({
     modelId: "scribe_v2_realtime",
-    commitStrategy: "vad",
+    commitStrategy: CommitStrategy.VAD,
     onCommittedTranscript: (data) => {
       if (data.text?.trim()) {
         onTranscript(data.text.trim());
