@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, Loader2, FlaskConical, Briefcase } from "lucide-react";
+import VoiceInputButton from "./VoiceInputButton";
 
 interface IdeaInputProps {
   onSubmit: (idea: string, mode: "research" | "business") => void;
@@ -107,9 +108,15 @@ const IdeaInput = ({ onSubmit, isLoading }: IdeaInputProps) => {
               disabled={isLoading}
             />
             <div className="flex justify-between items-center px-4 py-3 border-t border-border bg-secondary/30">
-              <span className="text-xs text-muted-foreground">
-                {idea.length > 0 ? `${idea.length} characters` : "Be as specific as possible"}
-              </span>
+              <div className="flex items-center gap-2">
+                <VoiceInputButton
+                  onTranscript={(text) => setIdea((prev) => (prev ? prev + " " + text : text))}
+                  disabled={isLoading}
+                />
+                <span className="text-xs text-muted-foreground">
+                  {idea.length > 0 ? `${idea.length} characters` : "Type or speak your idea"}
+                </span>
+              </div>
               <button
                 type="submit"
                 disabled={!idea.trim() || isLoading}
