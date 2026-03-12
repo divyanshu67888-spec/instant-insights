@@ -52,6 +52,7 @@ const Index = () => {
       <Hero />
       <Features />
       <IdeaInput onSubmit={(idea, mode) => handleSubmit(idea, mode)} isLoading={isLoading} />
+      <BudgetAdvisor />
 
       {report && (
         <motion.div
