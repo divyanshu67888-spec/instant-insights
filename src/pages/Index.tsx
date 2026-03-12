@@ -4,6 +4,7 @@ import Hero from "@/components/Hero";
 import IdeaInput from "@/components/IdeaInput";
 import ValidationReport, { WarRoomReport } from "@/components/ValidationReport";
 import Features from "@/components/Features";
+import BudgetAdvisor from "@/components/BudgetAdvisor";
 import { motion } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
@@ -51,6 +52,7 @@ const Index = () => {
       <Hero />
       <Features />
       <IdeaInput onSubmit={(idea, mode) => handleSubmit(idea, mode)} isLoading={isLoading} />
+      <BudgetAdvisor />
 
       {report && (
         <motion.div
