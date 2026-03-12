@@ -98,6 +98,21 @@ interface ValidationReportProps {
 }
 
 const ValidationReport = ({ report }: ValidationReportProps) => {
+  const summaryText = useMemo(() => {
+    const parts = [
+      `Overall score: ${report.score} out of 100. Confidence: ${report.confidenceLevel}.`,
+      report.verdict,
+      report.step4_finalReport?.executiveSummary,
+    ];
+    if (report.step4_finalReport?.majorRisks?.length) {
+      parts.push("Major risks include: " + report.step4_finalReport.majorRisks.join(", ") + ".");
+    }
+    if (report.step4_finalReport?.opportunitySignals?.length) {
+      parts.push("Key opportunities: " + report.step4_finalReport.opportunitySignals.join(", ") + ".");
+    }
+    return parts.filter(Boolean).join(" ");
+  }, [report]);
+
   return (
     <section className="py-20 px-6">
       <div className="max-w-6xl mx-auto">
@@ -114,6 +129,9 @@ const ValidationReport = ({ report }: ValidationReportProps) => {
           <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-3">
             360° Research Validation Report
           </h2>
+          <div className="flex justify-center">
+            <ListenButton text={summaryText} label="Listen to summary" />
+          </div>
         </motion.div>
 
         {/* Score Banner */}
