@@ -2,3 +2,12 @@ project_id = "aqbjwyhauejsziksuolp"
 
 [functions.war-room]
 verify_jwt = false
+
+[functions.budget-advisor]
+verify_jwt = false
+
+[functions.elevenlabs-tts]
+verify_jwt = false
+
+[functions.elevenlabs-scribe-token]
+verify_jwt = false
