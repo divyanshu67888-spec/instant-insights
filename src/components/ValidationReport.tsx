@@ -8,6 +8,7 @@ import DimensionCharts from "./report/DimensionCharts";
 import MarketMetricsSection from "./report/MarketMetricsSection";
 import CompetitionSection from "./report/CompetitionSection";
 import ImprovementsSection from "./report/ImprovementsSection";
+import ListenButton from "./ListenButton";
 
 export interface StepSentiment {
   sentiment: "positive" | "warning" | "neutral";
