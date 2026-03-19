@@ -11,9 +11,9 @@ serve(async (req) => {
   }
 
   try {
-    const { budget, currency = 'USD', location = '' } = await req.json();
-    if (!budget || budget <= 0) {
-      return new Response(JSON.stringify({ error: 'A valid budget amount is required' }), {
+    const { businessName, location, budgetPreference } = await req.json();
+    if (!businessName || !location || !budgetPreference) {
+      return new Response(JSON.stringify({ error: 'businessName, location, and budgetPreference are required' }), {
         status: 400,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
@@ -22,46 +22,82 @@ serve(async (req) => {
     const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
     if (!LOVABLE_API_KEY) throw new Error('LOVABLE_API_KEY is not configured');
 
-    const locationContext = location ? `The user is located in or targeting: ${location}.` : '';
-
-    const systemPrompt = `You are a pragmatic business advisor. Given a specific investment budget, recommend the best business opportunities that can realistically be started with that amount.
-
-${locationContext}
+    const systemPrompt = `You are an AI-powered business consultant integrated inside a market validation platform.
+Your job is to generate a complete, structured, and realistic business cost analysis based on user input.
 
 Respond with ONLY valid JSON (no markdown, no extra text) matching this exact structure:
 {
-  "recommendations": [
-    {
-      "rank": 1,
-      "name": "<business name/type>",
-      "category": "<e.g. Food & Beverage, Tech, Retail, Service, etc.>",
-      "investmentRange": "<e.g. $5K - $15K>",
-      "expectedMonthlyRevenue": "<e.g. $3K - $8K>",
-      "timeToBreakeven": "<e.g. 3-6 months>",
-      "profitMargin": "<e.g. 25-40%>",
-      "riskLevel": "low" | "medium" | "high",
-      "description": "<2-3 sentences explaining why this is a good fit for the budget>",
-      "requirements": ["<requirement 1>", "<requirement 2>", "<requirement 3>"],
-      "pros": ["<pro 1>", "<pro 2>", "<pro 3>"],
-      "cons": ["<con 1>", "<con 2>"]
-    }
-  ],
-  "budgetBreakdown": {
-    "totalBudget": "<formatted budget>",
-    "recommendedReserve": "<10-20% emergency fund>",
-    "deployableCapital": "<remaining after reserve>",
-    "advice": "<1-2 sentences on how to allocate the budget wisely>"
+  "businessOverview": {
+    "description": "<2-3 sentences explaining the business>",
+    "targetCustomers": "<who are the ideal customers>",
+    "businessModel": "<how the business makes money>"
   },
-  "marketInsight": "<2-3 sentences on current market conditions relevant to this budget range>"
+  "costBreakdown": {
+    "initialSetupCosts": [
+      { "item": "<e.g. Rent / Space Setup>", "amount": "<₹ amount>", "note": "<brief note>" }
+    ],
+    "monthlyRecurringCosts": [
+      { "item": "<e.g. Rent>", "amount": "<₹ amount/month>", "note": "<brief note>" }
+    ],
+    "totalInitialCost": "<₹ total>",
+    "totalMonthlyCost": "<₹ total>"
+  },
+  "budgetScenarios": {
+    "low": {
+      "range": "<₹ range>",
+      "includes": ["<what's included>"],
+      "tradeoffs": "<what you sacrifice>"
+    },
+    "medium": {
+      "range": "<₹ range>",
+      "includes": ["<improvements over low>"],
+      "tradeoffs": "<balanced approach>"
+    },
+    "high": {
+      "range": "<₹ range>",
+      "includes": ["<premium features>"],
+      "tradeoffs": "<maximum quality>"
+    }
+  },
+  "locationAdjustment": {
+    "tier1": { "label": "Tier 1 (Delhi, Mumbai, Bangalore)", "costMultiplier": "<e.g. 1.5x-2x>", "keyDifferences": ["<differences>"] },
+    "tier2": { "label": "Tier 2 Cities", "costMultiplier": "<e.g. 1x-1.3x>", "keyDifferences": ["<differences>"] },
+    "tier3": { "label": "Tier 3 Cities", "costMultiplier": "<e.g. 0.5x-0.8x>", "keyDifferences": ["<differences>"] }
+  },
+  "hiddenCosts": [
+    { "item": "<e.g. Legal & Compliance>", "estimated": "<₹ amount>", "note": "<why it's important>" }
+  ],
+  "investmentSummary": {
+    "minimumInvestment": "<₹ amount>",
+    "recommendedInvestment": "<₹ amount>",
+    "breakdownSummary": "<short summary>"
+  },
+  "profitEstimation": {
+    "expectedMonthlyRevenue": "<₹ range>",
+    "monthlyExpenses": "<₹ range>",
+    "expectedProfitRange": "<₹ range>",
+    "breakEvenMonths": "<e.g. 6-9 months>"
+  },
+  "smartInsights": {
+    "costSavingStrategies": ["<practical tip>"],
+    "commonMistakes": ["<mistake beginners make>"],
+    "spendMoreOn": ["<where to invest more>"],
+    "saveOn": ["<where to cut costs>"]
+  },
+  "growthPlan": {
+    "sixToTwelveMonths": ["<expansion step>"],
+    "revenueGrowthIdeas": ["<revenue idea>"],
+    "scalingIdeas": ["<online/offline scaling idea>"]
+  }
 }
 
 Guidelines:
-- Recommend 5-7 realistic businesses sorted by best fit for the budget
-- Be specific with revenue/profit estimates — no vague ranges
-- Consider startup costs, operating costs, and realistic timelines
-- Include a mix of online and offline businesses when appropriate
-- Factor in current market trends and demand
-- Be honest about risks and challenges`;
+- Use ₹ INR currency ONLY
+- Customize everything based on the specific business type, NOT generic advice
+- Adjust all costs based on the location tier
+- Be realistic and actionable for Indian users
+- Keep it startup-friendly and practical
+- Avoid vague ranges — be specific with numbers`;
 
     const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
       method: 'POST',
@@ -73,7 +109,7 @@ Guidelines:
         model: 'google/gemini-3-flash-preview',
         messages: [
           { role: 'system', content: systemPrompt },
-          { role: 'user', content: `I have a budget of ${currency} ${budget.toLocaleString()}${location ? ` and I'm based in ${location}` : ''}. What are the best business options I can start with this amount?` },
+          { role: 'user', content: `Business Idea: ${businessName}\nLocation: ${location}\nBudget Preference: ${budgetPreference}\n\nGenerate a complete business cost analysis.` },
         ],
       }),
     });
@@ -108,7 +144,7 @@ Guidelines:
       }
     } catch {
       console.error('Failed to parse AI response:', content);
-      throw new Error('Failed to parse recommendations');
+      throw new Error('Failed to parse analysis');
     }
 
     return new Response(JSON.stringify(result), {
