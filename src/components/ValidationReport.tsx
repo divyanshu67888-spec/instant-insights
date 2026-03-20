@@ -9,6 +9,8 @@ import MarketMetricsSection from "./report/MarketMetricsSection";
 import CompetitionSection from "./report/CompetitionSection";
 import ImprovementsSection from "./report/ImprovementsSection";
 import ListenButton from "./ListenButton";
+import EmailReportButton from "./EmailReportButton";
+import MVPRoadmapBuilder from "./MVPRoadmapBuilder";
 
 export interface StepSentiment {
   sentiment: "positive" | "warning" | "neutral";
@@ -95,9 +97,10 @@ export interface WarRoomReport {
 
 interface ValidationReportProps {
   report: WarRoomReport;
+  idea?: string;
 }
 
-const ValidationReport = ({ report }: ValidationReportProps) => {
+const ValidationReport = ({ report, idea = "" }: ValidationReportProps) => {
   const summaryText = useMemo(() => {
     const parts = [
       `Overall score: ${report.score} out of 100. Confidence: ${report.confidenceLevel}.`,
@@ -129,8 +132,9 @@ const ValidationReport = ({ report }: ValidationReportProps) => {
           <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-3">
             360° Research Validation Report
           </h2>
-          <div className="flex justify-center">
+          <div className="flex justify-center gap-3 flex-wrap">
             <ListenButton text={summaryText} label="Listen to summary" />
+            <EmailReportButton report={report} idea={idea} />
           </div>
         </motion.div>
 
@@ -207,6 +211,11 @@ const ValidationReport = ({ report }: ValidationReportProps) => {
         {/* Step 5 — Source Transparency */}
         {report.step5_sources && (
           <SourceTransparency sources={report.step5_sources.sourceTypes} />
+        )}
+
+        {/* MVP Roadmap Builder */}
+        {idea && (
+          <MVPRoadmapBuilder idea={idea} score={report.score} verdict={report.verdict} />
         )}
       </div>
     </section>
