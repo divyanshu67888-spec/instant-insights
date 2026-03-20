@@ -12,10 +12,12 @@ import { toast } from "@/hooks/use-toast";
 const Index = () => {
   const [report, setReport] = useState<WarRoomReport | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [currentIdea, setCurrentIdea] = useState("");
 
   const handleSubmit = async (idea: string, mode: "research" | "business" = "research") => {
     setIsLoading(true);
     setReport(null);
+    setCurrentIdea(idea);
 
     try {
       const { data, error } = await supabase.functions.invoke('war-room', {
@@ -61,7 +63,7 @@ const Index = () => {
           animate={{ opacity: 1 }}
           transition={{ duration: 0.4 }}
         >
-          <ValidationReport report={report} />
+          <ValidationReport report={report} idea={currentIdea} />
         </motion.div>
       )}
 

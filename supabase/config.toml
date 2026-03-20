@@ -11,3 +11,9 @@ verify_jwt = false
 
 [functions.elevenlabs-scribe-token]
 verify_jwt = false
+
+[functions.mvp-roadmap]
+verify_jwt = false
+
+[functions.email-report]
+verify_jwt = false
