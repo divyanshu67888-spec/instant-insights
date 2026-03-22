@@ -17,3 +17,6 @@ verify_jwt = false
 
 [functions.email-report]
 verify_jwt = false
+
+[functions.business-suggester]
+verify_jwt = false
